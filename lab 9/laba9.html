@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Практика</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            background: #f5f5f5;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+        .logo {
+            width: 100px; /* Уменьшенный размер логотипа */
+            height: auto;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .gallery img {
+            width: 200px;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="https://i.pinimg.com/736x/e0/c3/0f/e0c30f817731d724c7ad38445e725031.jpg" alt="Логотип" class="logo" id="siteLogo">
+        <h1 id="mainTitle">Основной заголовок сайта</h1>
+    </header>
+
+    <div class="gallery">
+        <img src="https://avatars.mds.yandex.net/i?id=12949a557eb275b5c7e69a5690b8d7ef_l-4600186-images-thumbs&n=13" alt="Мотоцикл 1">
+        <img src="https://i.pinimg.com/originals/32/b3/1b/32b31bc1ecfcecb32eeb5bf2fb50c352.jpg" alt="Мотоцикл 2" id="secondMoto">
+        <img src="https://avatars.mds.yandex.net/get-autoru-vos/2079203/71484ea934656c3161d3fb3cf73f0b21/1200x900" alt="Мотоцикл 3">
+        <img src="https://wallpaper-house.com/data/out/6/wallpaper2you_91755.jpg" alt="Мотоцикл 4">
+    </div>
+
+  <script>
+    $(document).ready(function() {
+        // 2. Скрытие всех изображений кроме первого с анимацией 5 секунд
+        $('.gallery img').not(':first').hide({
+            duration: 5000,
+            easing: 'swing',
+        });
+
+        // 3. Функция для изменения атрибутов
+        function updateAttribute(elementId, attrName, newValue) {
+            const $element = $('#' + elementId);
+            if ($element.length) {
+                $element.attr(attrName, newValue);
+            }
+        }
+
+
+        // 4. Анимация для второго мотоцикла
+        $('#secondMoto')
+            .css({
+                'border': '1px solid #333',
+                'transition': 'border-width 0.3s ease'
+            })
+            .animate({'border-width': '5px'}, {
+                duration: 5000,
+                complete: function() {
+                    $('.header').fadeOut(5000);
+                }
+            });
+
+        // 5. Добавление информационного блока
+        $('<p>', {
+            id: 'newParagraph',
+            text: 'Новый абзац',
+            css: {
+                'background-color': '#000',
+                'color': '#fff',
+                'padding': '15px',
+                'border-radius': '5px',
+                'margin-top': '20px'
+            }
+        }).appendTo('body');
+    });
+</script>
+</body>
+</html>
