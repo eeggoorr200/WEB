@@ -1,0 +1,124 @@
+body {
+    font-family: Arial, sans-serif; /* Шрифт для всей страницы */
+    margin: 0; /* Убирает внешние отступы */
+    padding: 0; /* Убирает внутренние отступы */
+    min-height: 100vh; /* Минимальная высота - весь экран */
+    display: flex; /* Включает flex-разметку */
+    flex-direction: column; /* Элементы располагаются вертикально */
+}
+
+main {
+    padding: 10px; /* Внутренние отступы */
+    margin: 0 auto; /* Центрирование по горизонтали */
+    flex: 1; /* Занимает все доступное пространство */
+}
+
+h1 {
+    color: #333; /* Темно-серый цвет */
+}
+
+h2 {
+    color: #000000; /* Черный цвет */
+    font-style: strong;
+    text-align: left; /* Выравнивание по левому краю */
+}
+
+h3 {
+    color: #000000; /* Черный цвет */
+}
+
+.top-menu {
+    background-color: #f0f0f0; /* Светло-серый фон */
+    padding: 10px; /* Внутренние отступы */
+    position: sticky; /* "Липкое" меню - остается при прокрутке */
+    top: 0; /* Прилипает к верху */
+    z-index: 100; /* Уровень слоя (чтобы было поверх других элементов) */
+}
+
+.columns {
+    display: flex; /* Flex-разметка */
+    flex-wrap: wrap; /* Перенос на новую строку при необходимости */
+    margin-top: 10px; /* Отступ сверху */
+    column-count: 4; /* Количество колонок */
+}
+
+.column1, .column2, .column3, .column4 {
+    float: left; /* Обтекание слева */
+    width: 25%; /* Ширина 25% (4 колонки) */
+}
+    
+.ad-container {
+        position: fixed; /* Фиксированное позиционирование */
+        left: 10px; /* Отступ слева */
+        bottom: 10px; /* Отступ снизу */
+        width: 170px; /* Ширина */
+        background-color: #f0f0f0; /* Светло-серый фон */
+        border: 1px solid #000000; /* Черная рамка */
+    }
+
+    .ad-header {
+        font-size: 16px; /* Размер шрифта */
+        font-weight: bold; /* Жирный шрифт */
+        color: #333; /* Цвет текста */
+        margin-bottom: 8px; /* Отступ снизу */
+        text-align: center; /* Выравнивание по центру */
+    }
+    
+    .ad-content {
+        font-size: 14px; /* Размер шрифта */
+        color: #666; /* Цвет текста */
+        margin-bottom: 10px; /* Отступ снизу */
+    }
+
+    html, body {
+        height: 100%; /* Высота 100% */
+        margin: 0; /* Убирает отступы */
+    }
+
+    main::after {
+        content: "";
+        display: table;
+        clear: both; /* Очистка обтекания */
+    }
+
+img {
+    max-width: 100%; /* Максимальная ширина изображения */
+    height: auto; /* Автоматическая высота */
+}
+
+table {
+    width: 100%; /* Ширина таблицы 100% */
+    border-collapse: collapse; /* Схлопывание границ */
+    margin: 10px 0; /* Отступы сверху и снизу */
+}
+
+table, th, td {
+    border: 1px solid #ddd; /* Серая рамка */
+}
+
+.top-menu li{
+    list-style:none;/*Скрываются маркер элементов списка*/ 
+    display:inline-block;/*Выстраивание пунктов меню в ряд*/
+    background:#ccc;/*Цвет фона для пункта*/
+    position:relative;
+}
+.top-menu li:hover{
+    background:#6c6c6c;/*Цвет фона при наведение на пункт*/
+}
+.top-menu li a{
+    color:#222;/*Цвет шрифта в пункте*/
+    padding:5px 7px;/*Отступы для пункта*/ 
+    text-decoration:none;/*Убирается подчеркивание*/ 
+    display:block;
+}
+.top-menu li ul{
+    display:none;/* Выпадающее меню прячется */
+    position:absolute;
+    padding-left:0;
+    width:120px;/*Ширина выпадающего меню*/
+    padding-top:3px;/*Отступ сверху у выпадающего меню*/
+}
+.top-menu li:hover ul{
+    display:block;/*Показ выпадающего меню при наведении*/
+    left:0px;
+}
