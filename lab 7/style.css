@@ -1,0 +1,25 @@
+body {
+    font-family: Arial;
+    margin: 0 auto;
+    padding: 20px;
+}
+.section {
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+input, select, button {
+    padding: 6px;
+    margin-top: 10px;
+}
+button {
+    background: #0051ff;
+    color: white;
+    border: none;
+}
+.result, .employee-row {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+} 
