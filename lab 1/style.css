@@ -1,0 +1,49 @@
+body {
+    text-align: right;
+    color: green;
+    font-size: 3em;
+}
+
+h1 {
+    text-align: right;
+    color: red;
+    text-decoration: none;
+}
+
+p, nav a {
+    text-decoration: underline; 
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+table {
+    text-decoration: underline; 
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid black;
+    border-collapse: collapse;
+}
+
+ul {
+    text-align: left;
+    text-decoration: underline; 
+}
+
+li {
+    padding-left: 20px; 
+    text-align: left;
+}
+
+
+th, td {
+    text-decoration: underline; 
+    border: 2px solid black; 
+    padding: 8px; 
+}
+
+th {
+    background-color: rgb(134, 208, 255); 
+}
