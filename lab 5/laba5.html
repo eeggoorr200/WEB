@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление контрактами сотрудников</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Управление контрактами сотрудников</h1>
+    
+    <form id="employeesForm" class="section">
+        <h2>Введите данные 10 сотрудников</h2>
+        <div id="employeesContainer"></div>
+        <button type="button" onclick="saveEmployees()">Сохранить данные</button>
+    </form>
+    
+    <div id="resultsSection" class="section">
+        <h2>Поиск сотрудников</h2>
+        
+        <div class="section">
+            <h3>Поиск по времени года окончания контракта</h3>
+            <label for="seasonSelect">Выберите время года:</label>
+            <select id="seasonSelect">
+                <option value="winter">Зима</option>
+                <option value="spring">Весна</option>
+                <option value="summer">Лето</option>
+                <option value="autumn">Осень</option>
+            </select>
+            <button type="button" onclick="findBySeason()">Найти</button>
+            <div id="seasonResult" class="result"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Поиск по кварталу окончания контракта</h3>
+            <label for="quarterSelect">Выберите квартал:</label>
+            <select id="quarterSelect">
+                <option value="1">I квартал (январь-март)</option>
+                <option value="2">II квартал (апрель-июнь)</option>
+                <option value="3">III квартал (июль-сентябрь)</option>
+                <option value="4">IV квартал (октябрь-декабрь)</option>
+            </select>
+            <button type="button" onclick="findByQuarter()">Найти</button>
+            <div id="quarterResult" class="result"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Поиск действующих контрактов на дату</h3>
+            <label for="currentDate">Выберите дату:</label>
+            <input type="date" id="currentDate" required>
+            <button type="button" onclick="findCurrentContracts()">Найти</button>
+            <div id="currentContractsResult" class="result"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Поиск завершенных контрактов на дату</h3>
+            <label for="endDate">Выберите дату:</label>
+            <input type="date" id="endDate" required>
+            <button type="button" onclick="findEndedContracts()">Найти</button>
+            <div id="endedContractsResult" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let employees = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('employeesContainer');
+            
+            for (let i = 1; i <= 10; i++) {
+                const employeeDiv = document.createElement('div');
+                employeeDiv.className = 'employee-row';
+                employeeDiv.innerHTML = `
+                    <h3>Сотрудник ${i}</h3>
+                    <label for="lastName${i}">Фамилия:</label>
+                    <input type="text" id="lastName${i}" name="lastName${i}" required>
+                    
+                    <label for="contractDate${i}">Дата заключения контракта:</label>
+                    <input type="date" id="contractDate${i}" name="contractDate${i}" required>
+                    
+                    <label for="contractYears${i}">Срок контракта (лет):</label>
+                    <input type="number" id="contractYears${i}" name="contractYears${i}" min="1" value="1" required>
+                `;
+                container.appendChild(employeeDiv);
+            }
+        });
+        
+        function saveEmployees() {
+            employees = [];
+            const container = document.getElementById('employeesContainer');
+            
+            for (let i = 1; i <= 10; i++) {
+                const lastName = document.getElementById(`lastName${i}`).value;
+                const contractDate = new Date(document.getElementById(`contractDate${i}`).value);
+                const contractYears = parseInt(document.getElementById(`contractYears${i}`).value);
+                
+                if (!lastName || isNaN(contractDate.getTime()) || isNaN(contractYears)) {
+                    alert('Пожалуйста, заполните все поля корректно!');
+                    return;
+                }
+                
+                const contractEndDate = new Date(contractDate);
+                contractEndDate.setFullYear(contractEndDate.getFullYear() + contractYears);
+                
+                employees.push({
+                    lastName: lastName,
+                    contractDate: contractDate,
+                    contractYears: contractYears,
+                    contractEndDate: contractEndDate
+                });
+            }
+            
+            alert(`Данные 10 сотрудников сохранены!`);
+        }
+        
+        // определение времени года
+        function getSeason(date) {
+            const month = date.getMonth();
+            if (month >= 2 && month <= 4) return 'spring';
+            if (month >= 5 && month <= 7) return 'summer';
+            if (month >= 8 && month <= 10) return 'autumn';
+            return 'winter';
+        }
+        
+        // получение названия времени года
+        function getSeasonName(season) {
+            const seasons = {
+                'winter': 'зимой',
+                'spring': 'весной',
+                'summer': 'летом',
+                'autumn': 'осенью'
+            };
+            return seasons[season];
+        }
+        
+        // поиск по времени года окончания контракта
+        function findBySeason() {
+            const season = document.getElementById('seasonSelect').value;
+            const resultDiv = document.getElementById('seasonResult');
+            
+            if (employees.length === 0) {
+                resultDiv.textContent = 'Сначала сохраните данные сотрудников!';
+                return;
+            }
+            
+            const filtered = employees.filter(emp => getSeason(emp.contractEndDate) === season);
+            
+            if (filtered.length === 0) {
+                resultDiv.textContent = 'Нет сотрудников с окончанием контракта в выбранное время года.';
+            } else {
+                resultDiv.innerHTML = `<strong>Сотрудники с окончанием контракта ${getSeasonName(season)}:</strong><br>` + 
+                    filtered.map(emp => `${emp.lastName} (${formatDate(emp.contractDate)} - ${formatDate(emp.contractEndDate)}, срок: ${emp.contractYears} год(а)/лет)`).join('<br>');
+            }
+        }
+        
+        // поиск по кворталу окончания контракта
+        function findByQuarter() {
+            const quarter = parseInt(document.getElementById('quarterSelect').value);
+            const resultDiv = document.getElementById('quarterResult');
+            
+            if (employees.length === 0) {
+                resultDiv.textContent = 'Сначала сохраните данные сотрудников!';
+                return;
+            }
+            
+            const filtered = employees.filter(emp => {
+                const month = emp.contractEndDate.getMonth();
+                const empQuarter = Math.floor(month / 3) + 1;
+                return empQuarter === quarter;
+            });
+            
+            if (filtered.length === 0) {
+                resultDiv.textContent = 'Нет сотрудников с окончанием контракта в выбранном квартале.';
+            } else {
+                resultDiv.innerHTML = `<strong>Сотрудники с окончанием контракта в ${quarter} квартале:</strong><br>` + 
+                    filtered.map(emp => `${emp.lastName} (${formatDate(emp.contractDate)} - ${formatDate(emp.contractEndDate)}, срок: ${emp.contractYears} год(а)/лет)`).join('<br>');
+            }
+        }
+        
+        // действующие контракты на дату
+        function findCurrentContracts() {
+            const currentDate = new Date(document.getElementById('currentDate').value);
+            const resultDiv = document.getElementById('currentContractsResult');
+            
+            if (isNaN(currentDate.getTime())) {
+                resultDiv.textContent = 'Пожалуйста, выберите корректную дату!';
+                return;
+            }
+            
+            if (employees.length === 0) {
+                resultDiv.textContent = 'Сначала сохраните данные сотрудников!';
+                return;
+            }
+            
+            const filtered = employees.filter(emp => 
+                emp.contractDate <= currentDate && currentDate <= emp.contractEndDate
+            );
+            
+            if (filtered.length === 0) {
+                resultDiv.textContent = `Нет действующих контрактов на ${formatDate(currentDate)}.`;
+            } else {
+                resultDiv.innerHTML = `<strong>Действующие контракты на ${formatDate(currentDate)}:</strong><br>` + 
+                    filtered.map(emp => `${emp.lastName} (${formatDate(emp.contractDate)} - ${formatDate(emp.contractEndDate)}, срок: ${emp.contractYears} год(а)/лет)`).join('<br>');
+            }
+        }
+        
+        // завершенные контракты на дату
+        function findEndedContracts() {
+            const endDate = new Date(document.getElementById('endDate').value);
+            const resultDiv = document.getElementById('endedContractsResult');
+            
+            if (isNaN(endDate.getTime())) {
+                resultDiv.textContent = 'Пожалуйста, выберите корректную дату!';
+                return;
+            }
+            
+            if (employees.length === 0) {
+                resultDiv.textContent = 'Сначала сохраните данные сотрудников!';
+                return;
+            }
+            
+            const filtered = employees.filter(emp => 
+                emp.contractEndDate <= endDate
+            );
+            
+            if (filtered.length === 0) {
+                resultDiv.textContent = `Нет завершенных контрактов на ${formatDate(endDate)}.`;
+            } else {
+                resultDiv.innerHTML = `<strong>Завершенные контракты на ${formatDate(endDate)}:</strong><br>` + 
+                    filtered.map(emp => `${emp.lastName} (${formatDate(emp.contractDate)} - ${formatDate(emp.contractEndDate)}, срок: ${emp.contractYears} год(а)/лет)`).join('<br>');
+            }
+        }
+        
+        // форматирования даты
+        function formatDate(date) {
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
+        
+        // определение номера недели в году
+        function getWeekNumber(date) {
+            const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+            const pastDaysOfYear = (date - firstDayOfYear) / 86400000;
+            return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+        }
+    </script>
+</body>
+</html>
