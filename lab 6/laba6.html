@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автомобильное горизонтальное меню</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Автомобильное горизонтальное меню</h1>
+    
+    <!-- Горизонтальное меню с колесом-указателем -->
+    <div class="menu-container">
+        <div class="menu-wheel">
+            <img class="wheel-image" src="wheel.png" alt="Указатель">
+            <div class="menu-items">
+                <div class="menu-item active" data-category="sport">Спортивные</div>
+                <div class="menu-item" data-category="suv">Внедорожники</div>
+                <div class="menu-item" data-category="electric">Электро</div>
+                <div class="menu-item" data-category="classic">Классика</div>
+                <div class="menu-item" data-category="luxury">Люкс</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Область для отображения изображений -->
+    <div class="image-container">
+        <img id="currentImage" src="images/sport1.jpg" alt="Автомобиль">
+    </div>
+    
+    <!-- Кнопки управления слайд-шоу -->
+    <div class="controls">
+        <button id="startBtn">Начать слайд-шоу</button>
+        <button id="stopBtn" disabled>Остановить</button>
+    </div>
+    
+    <script>
+        // Данные об изображениях для каждой категории
+        const imagesData = {
+            sport: ['sport1.jpg', 'sport2.jpg', 'sport3.jpg'],
+            suv: ['suv1.jpg', 'suv2.jpg', 'suv3.jpg'],
+            electric: ['electric1.jpg', 'electric2.jpg', 'electric3.jpg'],
+            classic: ['classic1.jpg', 'classic2.jpg', 'classic3.jpg'],
+            luxury: ['luxury1.jpg', 'luxury2.jpg', 'luxury3.jpg']
+        };
+        
+        // Текущие настройки
+        let currentCategory = 'sport';
+        let currentImageIndex = 0;
+        let slideInterval;
+        let isSlideshowRunning = false;
+        
+        // Элементы DOM
+        const currentImage = document.getElementById('currentImage');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const menuItems = document.querySelectorAll('.menu-item');
+        const pointer = document.querySelector('.wheel-image');
+        
+        // Рассчитываем позиции указателя для каждого пункта меню
+        function calculatePointerPositions() {
+            const positions = [];
+            const menuItems = document.querySelectorAll('.menu-item');
+            const container = document.querySelector('.menu-items');
+            const containerRect = container.getBoundingClientRect();
+    
+            menuItems.forEach(item => {
+                const itemRect = item.getBoundingClientRect();
+                // Позиция левого края пункта меню относительно контейнера
+                const leftPosition = itemRect.left - containerRect.left;
+                positions.push(`${leftPosition}px`);
+            });
+    
+            return positions;
+        }
+        
+        // Инициализация при загрузке страницы
+        window.addEventListener('load', function() {
+            const pointerPositions = calculatePointerPositions();
+            
+            // Показываем указатель для активного пункта
+            pointer.classList.add('visible');
+            pointer.style.left = pointerPositions[0];
+            
+            // Назначаем обработчики для пунктов меню
+            menuItems.forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    // Удаляем активный класс у всех пунктов
+                    menuItems.forEach(i => i.classList.remove('active'));
+                    
+                    // Добавляем активный класс к выбранному пункту
+                    this.classList.add('active');
+                    
+                    // Анимация указателя - сначала скрываем, затем перемещаем и показываем
+                    pointer.classList.remove('visible');
+                    
+                    setTimeout(() => {
+                        pointer.style.left = pointerPositions[index];
+                        pointer.classList.add('visible');
+                    }, 50);
+                    
+                    currentCategory = this.getAttribute('data-category');
+                    currentImageIndex = 0;
+                    updateImage();
+                    
+                    // Если слайд-шоу было запущено, перезапускаем с новой категорией
+                    if (isSlideshowRunning) {
+                        stopSlideshow();
+                        startSlideshow();
+                    }
+                });
+            });
+            
+            // Обработчики для кнопок управления
+            startBtn.addEventListener('click', startSlideshow);
+            stopBtn.addEventListener('click', stopSlideshow);
+        });
+        
+        // Функция обновления изображения
+        function updateImage() {
+            const images = imagesData[currentCategory];
+            currentImage.style.opacity = 0;
+            
+            setTimeout(() => {
+                currentImage.src = `images/${images[currentImageIndex]}`;
+                currentImage.alt = `Автомобиль ${currentCategory}`;
+                currentImage.style.opacity = 1;
+            }, 150);
+        }
+        
+        // Функция переключения на следующее изображение
+        function nextImage() {
+            const images = imagesData[currentCategory];
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            updateImage();
+        }
+        
+        // Запуск слайд-шоу
+        function startSlideshow() {
+            if (!isSlideshowRunning) {
+                slideInterval = setInterval(nextImage, 2000); // Смена каждые 2 секунды
+                isSlideshowRunning = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            }
+        }
+        
+        // Остановка слайд-шоу
+        function stopSlideshow() {
+            clearInterval(slideInterval);
+            isSlideshowRunning = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
