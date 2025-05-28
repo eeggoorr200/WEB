@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Анкета участника Олимпиады</title>
+    
+</head>
+<body>
+    <h1>Анкета участника Олимпиады</h1>
+    <div >
+        <label for="surname">Фамилия:</label>
+        <input type="text" id="surname" placeholder="Введите вашу фамилию с большой буквы">
+    </div>
+    <div >
+        <label for="school">Номер школы:</label>
+        <input type="number" id="school" placeholder="Укажите только число, например '12'" min="1">
+    </div>
+    
+    <div >
+        <label>Оценки за задачи (баллы):</label>
+        <div class="task-scores">
+            <div class="task-score">
+                <label for="task1">Задача 1:</label>
+                <select id="task1">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <div class="task-score">
+                <label for="task2">Задача 2:</label>
+                <select id="task2">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <div class="task-score">
+                <label for="task3">Задача 3:</label>
+                <select id="task3">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <div class="task-score">
+                <label for="task4">Задача 4:</label>
+                <select id="task4">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <div class="task-score">
+                <label for="task5">Задача 5:</label>
+                <select id="task5">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+            <div class="task-score">
+                <label for="task6">Задача 6:</label>
+                <select id="task6">
+                    <option value="0">0</option>
+                    <option value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    
+    <button onclick="processForm()">Определить результаты</button>
+    
+    <div id="result" class="result" style="display: none;">
+        <h2>Результаты участника</h2>
+        <p><strong>Участник:</strong> <span id="result-name"></span>, школа №<span id="result-school"></span></p>
+        <p><strong>Оценки за задачи:</strong> <span id="result-scores"></span></p>
+        <p><strong>Сумма баллов:</strong> <span id="result-total"></span></p>
+        <p><strong>Место:</strong> <span id="result-place"></span></p>
+    </div>
+    
+    <script>
+        function processForm() {
+            const surname = document.getElementById('surname').value || "Не указано";
+            const school = document.getElementById('school').value || "Не указан";
+            
+            const scores = [];
+            for (let i = 1; i <= 6; i++) {
+                scores.push(parseInt(document.getElementById(`task${i}`).value));
+            }
+            
+            const total = scores.reduce((sum, score) => sum + score, 0);
+            
+            let place;
+            
+            if (scores.every(score => score === 30)) {
+                place = "1 место (все задачи решены на 30 баллов)";
+            } 
+            else if (scores.every(score => score >= 20) && scores.some(score => score === 30)) {
+                place = "2 место (все задачи ≥ 20 баллов, есть хотя бы одна 30)";
+            } 
+            else if (scores.every(score => score === 20)) {
+                place = "3 место (все задачи решены на 20 баллов)";
+            } 
+            else {
+                place = "Без призового места";
+            }
+            
+            document.getElementById('result-name').textContent = surname;
+            document.getElementById('result-school').textContent = school;
+            document.getElementById('result-scores').textContent = scores.join(", ");
+            document.getElementById('result-total').textContent = total;
+            document.getElementById('result-place').textContent = place;
+            
+            document.getElementById('result').style.display = "block";
+        }
+    </script>
+</body>
+</html>
