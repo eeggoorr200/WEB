@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Основные селекторы</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        .container {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 5px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #000000;
+            padding: 8px;
+            text-align: left;
+        }
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <!-- Отобрать в набор элементы “li”, которые находятся внутри блока с id=" my_links" , в которых содержатся элементы “a” -->
+    <div class="container">
+        <h2>1. Элементы li внутри #my_links с элементами a</h2>
+        <ul id="my_links">
+            <li>Простой пункт списка</li>
+            <li><a href="https://www.youtube.com">Ссылка 1</a></li>
+            <li><span>Текст без ссылки</span></li>
+            <li><a href="documents/file1.pdf">Документ 1</a></li>
+            <li><a href="https://translate.google.com/?hl=ru&sl=ru&tl=en&op=translate">Ссылка 2</a></li>
+        </ul>
+        <button id="btn1">Выделить соответствующие li</button>
+    </div>
+    
+    <!-- Второй пример: ссылки внутри #my_links с href, начинающимся на "documents" -->
+    <div class="container">
+        <h2>2. Ссылки внутри #my_links с href, начинающимся на "documents"</h2>
+        <button id="btn2">Выделить соответствующие ссылки</button>
+    </div>
+    
+    <!-- Третий пример: последние ячейки в четных строках таблицы #moto_table -->
+    <div class="container">
+        <h2>3. Последние ячейки в четных строках таблицы #moto_table</h2>
+        <table id="moto_table">
+                <tr>
+                    <th>Марка</th>
+                    <th>Модель</th>
+                    <th>Год</th>
+                    <th>Цена</th>
+                </tr>
+                <tr>
+                    <td>Honda</td>
+                    <td>CBR600RR</td>
+                    <td>2020</td>
+                    <td>12,000</td>
+                </tr>
+                <tr>
+                    <td>Yamaha</td>
+                    <td>R6</td>
+                    <td>2019</td>
+                    <td>11,500</td>
+                </tr>
+                <tr>
+                    <td>Kawasaki</td>
+                    <td>Ninja 650</td>
+                    <td>2021</td>
+                    <td>8,200</td>
+                </tr>
+                <tr>
+                    <td>Suzuki</td>
+                    <td>GSX-R750</td>
+                    <td>2018</td>
+                    <td>10,800</td>
+                </tr>
+                <tr>
+                    <td>Ducati</td>
+                    <td>Panigale V4</td>
+                    <td>2022</td>
+                    <td>24,000</td>
+                </tr>
+        </table>
+        <button id="btn3">Выделить последние ячейки в четных строках</button>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // 1. Элементы li внутри #my_links, которые содержат элементы a
+            $("#btn1").click(function() {
+                $("#my_links li:has(a)").addClass("highlight");
+            });
+            
+            // 2. Ссылки внутри #my_links, где href начинается со слова "documents"
+            $("#btn2").click(function() {
+                $("#my_links a[href^='documents']").addClass("highlight");
+            });
+            
+            // 3. Последние ячейки в четных строках таблицы #moto_table
+            $("#btn3").click(function() {
+                $("#moto_table tr:even td:last-child").addClass("highlight");
+            });
+        });
+    </script>
+</body>
+</html>
