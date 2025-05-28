@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ФИО</title>
+  </head>
+  <body>
+    <script>
+      let surname = prompt("Введите свою фамилию", "");
+
+      let name = prompt("Введите свое имя", "");
+
+      let patronymic = prompt("Введите свое отчество", "");
+
+      if (confirm(`${surname} ${name} ${patronymic}\nВсё верно?`)) {
+        alert(`Молодец,\n${surname} ${name} ${patronymic}`);
+      } else {
+        alert("Ошибка в данных");
+      }
+    </script>
+
+    <p>
+      <a href="hipo.html">Гипотенуза</a>
+    </p>
+  </body>
+</html>
